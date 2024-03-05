@@ -1,0 +1,79 @@
+import pyttsx3
+import speech_recognition as sr
+import datetime as dt
+
+engine = pyttsx3.init("sapi5")
+voices = engine.getProperty("voices")
+engine.setProperty("voice", voices[0].id)
+engine.setProperty("rate", 170)
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+def greetme():
+    hour = int(dt.datetime.now().hour)
+    if 0 <= hour < 4:
+        speak("Good night cege!")
+    elif 4 <= hour < 12:
+        speak("Good morning cege!")
+    elif 12 <= hour < 16:
+        speak("Good afternoon cege!")
+    else:
+        speak("Good evening cege!")
+
+    speak("How can I assist you today?")
+
+def takecommand():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening....")
+        r.pause_threshold = 3
+        r.energy_threshold = 400
+        audio = r.listen(source, 0, 4)
+    try:
+        print("Understanding.....")
+        query = r.recognize_google(audio, language='en-in')
+        print(f"You said: {query}")
+        return query.lower()
+    except Exception as e:
+        print("Say that again...")
+        return "None"
+
+if __name__ == '__main__':
+    greetme()
+    
+    while True:
+        query = takecommand()
+        if 'wake up' in query:
+            greetme()
+
+            while True:
+                query = takecommand()
+                if "time to sleep jarvis" in query:
+                    speak("Okay sir! You can call me anytime.")
+                    break
+
+############################################----YOUR OTHER FILE----#########################################
+
+#### The other file ######
+
+
+
+import pyttsx3
+from greet import greetme  # Assuming greet.py is in the same directory
+
+engine = pyttsx3.init("sapi5")
+voices = engine.getProperty("voices")
+engine.setProperty("voice", voices[0].id)
+engine.setProperty("rate", 170)
+
+def take_command():
+    # Your speech recognition code goes here
+    pass
+
+if __name__ == '__main__':
+    greetme()
+    
+    while True:
+        query = take_command().lower()
