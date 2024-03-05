@@ -1,0 +1,21 @@
+import requests
+from PIL import Image
+import pyscreenshot
+
+def capture_from_url(url):
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+
+    # Open the image using PIL
+    img = Image.open(response.raw)
+
+    # Display the image
+    img.show()
+
+    # Save the image
+    img.save("captured_image.png")
+
+# Replace 'your_url_here' with the actual URL of the image you want to capture
+url = 'https://freeyork.org/wp-content/uploads/2013/10/Stunning-Landscape-Wallpapers-2.jpg'
+capture_from_url(url)
+
